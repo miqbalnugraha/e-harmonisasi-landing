@@ -1,119 +1,131 @@
 import { Separator } from "@/components/ui/separator";
-import { ChevronsDownIcon } from "lucide-react";
+import DiscordIcon from "@/components/icons/discord-icon";
+import { Building2, Clock, Mail, Phone, Scale } from "lucide-react";
+import { SocialIcon } from "react-social-icons";
 import Link from "next/link";
+import Image from "next/image";
 
 export const FooterSection = () => {
   return (
-    <footer id="footer" className="container py-24 sm:py-32">
-      <div className="p-10 bg-card border border-secondary rounded-2xl">
-        <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-x-12 gap-y-8">
-          <div className="col-span-full xl:col-span-2">
-            <Link href="#" className="flex font-bold items-center">
-              <ChevronsDownIcon className="w-9 h-9 mr-2 bg-gradient-to-tr from-primary via-primary/70 to-primary rounded-lg border border-secondary" />
+    <>
+      <footer
+        id="footer"
+        className="container relative pt-24 pb-16 sm:pb-24 sm:pt-32 overflow-visible"
+      >
+        <div className="rounded-2xl border bg-muted/30 backdrop-blur-sm p-10">
+          {/* Top grid */}
+          <div className="grid lg:grid-cols-12 gap-8">
+            {/* Logo + Info */}
+            <div className="col-span-8 flex flex-col gap-6">
+              <div className="flex items-start gap-4">
+                <Image
+                  src="/logo-kemenkum.svg"
+                  alt="Direktorat Jenderal Peraturan Perundang-undangan"
+                  width={80}
+                  height={80}
+                  className="shrink-0"
+                />
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">
+                    Direktorat Jenderal Peraturan Perundang-undangan
+                  </h3>
+                  <h3 className="text-lg">
+                    Kementerian Hukum Republik Indonesia
+                  </h3>
+                </div>
+              </div>
 
-              <h3 className="text-2xl">Shadcn</h3>
-            </Link>
+              {/* Social Icons */}
+              <div className="flex gap-3">
+                <SocialIcon
+                  url="https://x.com/djppkemenkum"
+                  bgColor="transparent"
+                  fgColor="currentColor"
+                  className="hover:text-red-500 transition-colors"
+                />
+                <SocialIcon
+                  url="https://www.youtube.com/channel/UCExwMueUZboNucTgXxh4pfA"
+                  bgColor="transparent"
+                  fgColor="currentColor"
+                  className="hover:text-red-500 transition-colors"
+                />
+                <SocialIcon
+                  url="https://www.instagram.com/djpp.kemenkum"
+                  bgColor="transparent"
+                  fgColor="currentColor"
+                  className="hover:text-red-500 transition-colors"
+                />
+                <SocialIcon
+                  url="https://www.facebook.com/profile.php?id=100083127627108"
+                  bgColor="transparent"
+                  fgColor="currentColor"
+                  className="hover:text-red-500 transition-colors"
+                />
+                <SocialIcon
+                  url="https://www.tiktok.com/@djpp_kemenkum"
+                  bgColor="transparent"
+                  fgColor="currentColor"
+                  className="hover:text-red-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Contact */}
+            <div className="col-span-4 flex flex-col gap-3 text-sm">
+              <div className="flex gap-2 items-start">
+                <Building2 className="h-5 w-5 shrink-0 " />
+                <span>JL.HR.Rasuna Kav 6-7 Jakarta Selatan</span>
+              </div>
+              <div className="flex gap-2 items-center">
+                <Phone className="h-5 w-5 shrink-0 " />
+                <span>(021) 5264517</span>
+              </div>
+              <Link
+                href="mailto:ditjenpp@kemenkum.go.id"
+                className="flex gap-2 items-center hover:text-red-500 transition-colors"
+              >
+                <Mail className="h-5 w-5 shrink-0" />
+                ditjenpp@kemenkum.go.id
+              </Link>
+              <Link
+                href="https://peraturan.go.id"
+                target="_blank"
+                className="flex gap-2 items-center hover:text-red-500 transition-colors"
+              >
+                <Scale className="h-5 w-5 shrink-0" />
+                peraturan.go.id
+              </Link>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Contact</h3>
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Github
-              </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Twitter
-              </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Instagram
-              </Link>
-            </div>
+          {/* Watermark text */}
+          <div className="w-full text-center lg:text-start pt-10 lg:pt-4 -mb-6">
+            <h1
+              className="text-5xl lg:text-9xl font-bold tracking-tight 
+        bg-gradient-to-t from-transparent to-primary/20 
+        bg-clip-text text-transparent leading-none select-none"
+            >
+              harmonisasi
+            </h1>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Platforms</h3>
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                iOS
+          {/* Bottom */}
+          <Separator className="my-6" />
+          <div className="flex flex-col sm:flex-row justify-between text-sm text-muted-foreground -mb-6 -mt-2 gap-4">
+            <p>&copy; 2025 Direktorat Jenderal Peraturan Perundang-undangan</p>
+            <p>
+              Made by{" "}
+              <Link
+                target="_blank"
+                href="https://djpp.kemenkum.go.id"
+                className="text-primary hover:underline"
+              >
+                Sisinfo Ditjen PP
               </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Android
-              </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Web
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Help</h3>
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Contact Us
-              </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                FAQ
-              </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Feedback
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Socials</h3>
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Twitch
-              </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Discord
-              </Link>
-            </div>
-
-            <div>
-              <Link href="#" className="opacity-60 hover:opacity-100">
-                Dribbble
-              </Link>
-            </div>
+            </p>
           </div>
         </div>
-
-        <Separator className="my-6" />
-        <section className="">
-          <h3 className="">
-            &copy; 2024 Designed and developed by
-            <Link
-              target="_blank"
-              href="https://github.com/leoMirandaa"
-              className="text-primary transition-all border-primary hover:border-b-2 ml-1"
-            >
-              Leo Miranda
-            </Link>
-          </h3>
-        </section>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 };

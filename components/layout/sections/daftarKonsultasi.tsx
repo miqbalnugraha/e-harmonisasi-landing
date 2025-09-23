@@ -14,7 +14,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Star } from "lucide-react";
+import { Star, MessageSquareQuote } from "lucide-react";
 
 interface ReviewProps {
   image: string;
@@ -27,8 +27,8 @@ interface ReviewProps {
 const reviewList: ReviewProps[] = [
   {
     image: "https://github.com/shadcn.png",
-    name: "John Doe",
-    userName: "Product Manager",
+    name: "Peraturan Badan/Lembaga",
+    userName: "Badan Pengelola Tabungan Perumahan Rakyat",
     comment:
       "Wow NextJs + Shadcn is awesome!. This template lets me change colors, fonts and images to match my brand identity. ",
     rating: 5.0,
@@ -76,16 +76,17 @@ const reviewList: ReviewProps[] = [
   },
 ];
 
-export const TestimonialSection = () => {
+export const DaftarKonsultasiSection = () => {
   return (
     <section id="testimonials" className="container py-24 sm:py-32">
       <div className="text-center mb-8">
         <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-          Testimonials
+          Konsultasi Publik
         </h2>
 
-        <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
-          Hear What Our 1000+ Clients Say
+        <h2 className="text-xl md:text-2xl text-center font-bold mb-4">
+          Daftar Konsultasi Publik Rancangan Peraturan Perundang-undangan
+          Terbaru
         </h2>
       </div>
 
@@ -104,11 +105,7 @@ export const TestimonialSection = () => {
               <Card className="bg-muted/50 dark:bg-card">
                 <CardContent className="pt-6 pb-0">
                   <div className="flex gap-1 pb-6">
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
+                    <MessageSquareQuote className="text-primary" size={30} />
                   </div>
                   {`"${review.comment}"`}
                 </CardContent>
@@ -116,10 +113,7 @@ export const TestimonialSection = () => {
                 <CardHeader>
                   <div className="flex flex-row items-center gap-4">
                     <Avatar>
-                      <AvatarImage
-                        src="https://avatars.githubusercontent.com/u/75042455?v=4"
-                        alt="radix"
-                      />
+                      <AvatarImage src="/avatars.png" alt="radix" />
                       <AvatarFallback>SV</AvatarFallback>
                     </Avatar>
 

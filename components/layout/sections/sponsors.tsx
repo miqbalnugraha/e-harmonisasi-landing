@@ -62,7 +62,7 @@ export const SponsorsSection = () => {
               <Icon
                 name={icon as keyof typeof icons}
                 size={32}
-                color="white"
+                color="black"
                 className="mr-2"
               />
               {name}

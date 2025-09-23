@@ -50,7 +50,7 @@ export const columns: ColumnDef<TaskType>[] = [
     ),
     cell: ({ row }) => {
       const label = label_options.find(
-        (label) => label.value === row.original.label,
+        (label) => label.value === row.original.label
       );
 
       return (
@@ -70,7 +70,7 @@ export const columns: ColumnDef<TaskType>[] = [
     ),
     cell: ({ row }) => {
       const status = status_options.find(
-        (status) => status.value === row.getValue("status"),
+        (status) => status.value === row.getValue("status")
       );
 
       if (!status) {
@@ -97,7 +97,7 @@ export const columns: ColumnDef<TaskType>[] = [
     ),
     cell: ({ row }) => {
       const priority = priority_options.find(
-        (priority) => priority.value === row.getValue("priority"),
+        (priority) => priority.value === row.getValue("priority")
       );
 
       if (!priority) {

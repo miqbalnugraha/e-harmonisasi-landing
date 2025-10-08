@@ -20,9 +20,9 @@ type dataProp = {
   label: string;
   icon: any;
 };
-export const status_options = [
+export const status_options2 = [
   {
-    value: "backlog",
+    value: "Proses",
     label: "Backlog",
     icon: HelpCircle,
   },
@@ -44,6 +44,29 @@ export const status_options = [
   {
     value: "canceled",
     label: "Canceled",
+    icon: XCircle,
+  },
+];
+
+export const status_options = [
+  {
+    value: "Permohonan",
+    label: "Permohonan",
+    icon: HelpCircle,
+  },
+  {
+    value: "Proses",
+    label: "Proses",
+    icon: Timer,
+  },
+  {
+    value: "Selesai",
+    label: "Selesai",
+    icon: CheckCircle2,
+  },
+  {
+    value: "Dikembalikan",
+    label: "Dikembalikan",
     icon: XCircle,
   },
 ];

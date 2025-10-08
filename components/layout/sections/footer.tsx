@@ -74,7 +74,11 @@ export const FooterSection = () => {
             <div className="col-span-4 flex flex-col gap-3 text-sm">
               <div className="flex gap-2 items-start">
                 <Building2 className="h-5 w-5 shrink-0 " />
-                <span>JL.HR.Rasuna Kav 6-7 Jakarta Selatan</span>
+                <span>
+                  Jl. Hr. Rasuna Said Kav X6/1-3, RT.7/RW.4, Kuningan, Karet
+                  Kuningan, Kecamatan Setiabudi, Jakarta Selatan, Daerah Khusus
+                  Ibukota Jakarta 12940
+                </span>
               </div>
               <div className="flex gap-2 items-center">
                 <Phone className="h-5 w-5 shrink-0 " />

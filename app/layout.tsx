@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { FooterSection } from "@/components/layout/sections/footer";
-const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "@/components/ui/sonner";
+
+const inter = Inter({
+  weight: ["400", "500", "600", "800"],
+  subsets: ["latin"],
+});
+const poppins = Poppins({
+  weight: ["400", "500", "600", "800"],
+  subsets: ["latin"],
+});
 
 export const metadata = {
   authors: [
@@ -82,6 +91,7 @@ export default function RootLayout({
           <div className="container w-full py-20 md:py-32">{children}</div>
           <FooterSection />
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

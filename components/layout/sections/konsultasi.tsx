@@ -46,13 +46,13 @@ export const KonsultasiSection = () => {
           </h2>
 
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Konsultasi
+            Partisipasi
             <span className="text-transparent px-2 bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text">
-              Publik
+              Masyarakat
             </span>
           </h2>
           <p className="text-md  md:text-lg text-muted-foreground mb-8">
-            Konsultasi Publik adalah kegiatan yang dilakukan untuk menerima
+            Partisipasi Masyarakat adalah kegiatan yang dilakukan untuk menerima
             masukan, tanggapan, atau pandangan dari masyarakat dalam rangka
             menciptakan peraturan perundang-undangan yang berkualitas.
           </p>

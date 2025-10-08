@@ -1,4 +1,6 @@
-import { KonsultasiSection } from "@/components/layout/sections/konsultasi";
+// import { KonsultasiSection } from "@/components/layout/sections/konsultasi";
+import { PartisipasiSection } from "./(home)/partisipasi/comps";
+import { DaftarMasukan } from "./(home)/last-partisipasi/comps";
 import { CommunitySection } from "@/components/layout/sections/community";
 import { ContactSection } from "@/components/layout/sections/contact";
 import { FAQSection } from "@/components/layout/sections/faq";
@@ -75,9 +77,9 @@ export default function Home() {
       <HeroSection />
       {/* <SponsorsSection /> */}
       {/* <FeaturesSection /> */}
-      <KonsultasiSection />
+      <PartisipasiSection />
       {/* <ServicesSection /> */}
-      <DaftarKonsultasiSection />
+      <DaftarMasukan />
       {/* <TeamSection />
       <CommunitySection /> */}
       {/* <PricingSection />

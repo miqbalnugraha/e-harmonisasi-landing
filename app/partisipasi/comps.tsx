@@ -3,11 +3,19 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { HeartHandshake } from "lucide-react";
-import { regulations } from "@/types/regulation";
+import { Regulation, regulations } from "@/types/regulation";
+import { ConvertedItem } from "@/types/jenisUU";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Command,
   CommandEmpty,
@@ -22,15 +30,187 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import SelectJenisUU from "@/components/my/select-input-jenis-uu";
+import TableRancangan from "./(table)/table";
+import { DataTableToolbar } from "@/components/data-table/data-table-toolbar-serverside";
+import DataTablePagination from "@/components/data-table/data-table-pagination-serverside";
+import { Rancangan } from "@/types/rancangan";
+import { formatDateAndOtherTime } from "@/lib/formatDate";
 
 export default function Partisipasi() {
-  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
   const [jenisUUList, setJenisUUList] = useState<any[]>([]);
+  const [openJenisUU, setOpenJenisUU] = useState(false);
   const [valueJenisUU, setValueJenisUU] = useState("");
+  const [valueTahun, setValueTahun] = useState("");
+
+  // search filter
+  const [searchNamaRancangan, setSearchNamaRancangan] = useState("");
+  const [searchNamaPemrakarsa, setSearchNamaPemrakarsa] = useState("");
+  const [searchStatus, setSearchStatus] = useState<any[]>([]);
+
+  // pagination
+  const [displayedItems, setDisplayedItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState<any>(1);
+  const [itemsPerPage, setItemsPerpage] = useState<any>(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  function convertJenisUuToDisplay(data: any): ConvertedItem[] {
+    if (data.length === 0) {
+      console.warn("API response was unsuccessful or data array is empty.");
+      return [];
+    }
+
+    return data.map((item: any) => {
+      const itemId = item.singkatan;
+
+      return {
+        id: itemId,
+        title: item.nama,
+        // desc: description,
+      };
+    });
+  }
+
+  // fetch list rancangan
+  useEffect(() => {
+    if (valueJenisUU && valueTahun) {
+      const delayDebounceFn = setTimeout(() => {
+        const fetchListRancangan = async () => {
+          try {
+            setIsLoading(true);
+            let f = new FormData();
+            const split_valueJenisUU = valueJenisUU.split("#");
+            f.append("jenis_rancangan", split_valueJenisUU[1]);
+            f.append("tahun", valueTahun);
+            f.append("nama_rancangan", searchNamaRancangan);
+            f.append("nama_pemrakarsa", searchNamaPemrakarsa);
+            f.append("status", searchStatus.toString());
+            f.append("page", currentPage);
+            f.append("per_page", itemsPerPage);
+
+            const response = await fetch(
+              "/api/rancangan/list_rancangan_by_jenis",
+              {
+                method: "POST",
+                body: f,
+              }
+            );
+            const data = await response.json();
+
+            if (response.ok) {
+              const data_list = data.data.data;
+              const data_pagination = data.data.pagination;
+
+              const formattedData = data_list.map((item: any) => {
+                const {
+                  formattedDate,
+                  formattedDate2,
+                  formattedTime,
+                  formattedTime2,
+                } = formatDateAndOtherTime(
+                  item.tgl_permohonan,
+                  item.tgl_selesai,
+                  item.tgl_permohonan,
+                  item.tgl_selesai
+                );
+                return {
+                  ...item,
+                  formatted_tgl_permohonan: formattedDate,
+                  formatted_tgl_selesai: formattedDate2,
+                };
+              });
+
+              setDisplayedItems(formattedData);
+              setTotalItems(data_pagination.totalCount);
+              setIsLoading(false);
+            } else {
+              setMessage(data.message || "Failed to fetch data");
+              setIsLoading(false);
+            }
+          } catch (error: any) {
+            setIsLoading(false);
+            console.error("Error:", error);
+            const msg = error?.response.data.message;
+            setMessage(msg);
+            if (!msg) {
+              const res_data = error?.response.data;
+              const responseCode = res_data.split(":");
+              setMessage(responseCode[0]);
+            }
+          }
+        };
+        fetchListRancangan();
+      }, 300);
+      return () => clearTimeout(delayDebounceFn);
+    }
+  }, [
+    valueJenisUU,
+    valueTahun,
+    searchNamaRancangan,
+    searchNamaPemrakarsa,
+    searchStatus,
+    currentPage,
+    itemsPerPage,
+  ]);
 
   useEffect(() => {
-    setJenisUUList(regulations);
+    setCurrentPage(1);
+  }, [
+    valueJenisUU,
+    valueTahun,
+    searchNamaRancangan,
+    searchNamaPemrakarsa,
+    searchStatus,
+  ]);
+
+  const getYearOptions = (startYear: number) => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: currentYear - startYear + 1 }, (_, i) => {
+      const year = startYear + i;
+      return { label: String(year), value: String(year) };
+    }).reverse();
+  };
+
+  const yearOptions = getYearOptions(2025);
+
+  // master jenis uu
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      const fetchMasterJenisUU = async () => {
+        try {
+          setIsLoading(true);
+          const response = await fetch("/api/master/master_jenis_uu", {
+            method: "GET",
+          });
+          const data = await response.json();
+
+          if (response.ok) {
+            const convertedData = convertJenisUuToDisplay(data.data);
+            setJenisUUList(convertedData);
+            setIsLoading(false);
+          } else {
+            setMessage(data.message || "Failed to fetch data");
+            setIsLoading(false);
+          }
+        } catch (error: any) {
+          setIsLoading(false);
+          console.error("Error:", error);
+          const msg = error?.response.data.message;
+          setMessage(msg);
+          if (!msg) {
+            const res_data = error?.response.data;
+            const responseCode = res_data.split(":");
+            setMessage(responseCode[0]);
+          }
+        }
+      };
+      fetchMasterJenisUU();
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
   }, []);
+
   return (
     <>
       <section>
@@ -51,18 +231,15 @@ export default function Partisipasi() {
           </p>
         </div>
 
-        <div className="mt-24 lg:mt-32 justify-between grid grid-cols-2">
-          <div className="">
-            {/* <label className="mb-1 block text-sm font-semibold text-sky-700">
-              Jenis Undang-Undang
-            </label> */}
-            <Popover open={open} onOpenChange={setOpen}>
+        <div className="mt-20 justify-between w-full">
+          <div className="flex space-x-2">
+            <Popover open={openJenisUU} onOpenChange={setOpenJenisUU}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   role="combobox"
-                  aria-expanded={open}
-                  className="w-full justify-between"
+                  aria-expanded={openJenisUU}
+                  className="lg:w-1/4 justify-between"
                 >
                   <SelectJenisUU
                     value={valueJenisUU}
@@ -88,7 +265,7 @@ export default function Partisipasi() {
                                   ? ""
                                   : currentValue
                               );
-                              setOpen(false);
+                              setOpenJenisUU(false);
                             }}
                           >
                             {item.title}
@@ -107,10 +284,59 @@ export default function Partisipasi() {
                 </Command>
               </PopoverContent>
             </Popover>
+            <Select
+              value={valueTahun}
+              onValueChange={(val) => setValueTahun(val)}
+            >
+              <SelectTrigger className="w-1/12">
+                <SelectValue placeholder="Tahun" />
+              </SelectTrigger>
+              <SelectContent>
+                {yearOptions.map((year) => (
+                  <SelectItem key={year.value} value={year.value}>
+                    {year.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {/* <label className="mt-1 w-full block text-xs font-semibold text-slate-400">
+              &nbsp; *) Daftar yang ditampilkan merupakan rancangan peraturan
+              yang berstatus permohonan dan/atau dalam proses harmonisasi.
+            </label> */}
           </div>
           {/* <div className="col-span-6 -mt-64">
             <DotLottieReact src="/lotties/Thinking.lottie" loop autoplay />
           </div> */}
+        </div>
+        <div className="mt-8">
+          <DataTableToolbar
+            valueNamaRancangan={searchNamaRancangan}
+            placeholderNamaRancangan="Filter Nama Rancangan..."
+            onChangeNamaRancangan={(e: any) =>
+              setSearchNamaRancangan(e.target.value)
+            }
+            valueNamaPemrakarsa={searchNamaPemrakarsa}
+            placeholderNamaPemrakarsa="Filter Nama Pemrakarsa..."
+            onChangeNamaPemrakarsa={(e: any) =>
+              setSearchNamaPemrakarsa(e.target.value)
+            }
+            valueStatus={searchStatus}
+            onChangeStatus={setSearchStatus}
+            onReset={() => {
+              setSearchNamaRancangan("");
+              setSearchNamaPemrakarsa("");
+              setSearchStatus([]);
+            }}
+          />
+          <TableRancangan items={displayedItems} loadingList={isLoading} />
+          <DataTablePagination
+            showPage={true}
+            totalPosts={totalItems}
+            postsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            setPostsPerPage={setItemsPerpage}
+          />
         </div>
       </section>
     </>

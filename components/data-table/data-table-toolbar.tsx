@@ -7,7 +7,11 @@ import { Input } from "@/components/ui/input";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { X } from "lucide-react";
-import { wajib_dibuka_options, kategori_options } from "./filters";
+import {
+  wajib_dibuka_options,
+  kategori_options,
+  status_options,
+} from "./filters";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -22,21 +26,39 @@ export function DataTableToolbar<TData>({
     <div className="mb-4 flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter Judul Dokumen..."
-          value={(table.getColumn("JUDUL")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter Nama Rancangan..."
+          value={
+            (table.getColumn("nama_rancangan")?.getFilterValue() as string) ??
+            ""
+          }
           onChange={(event) =>
-            table.getColumn("JUDUL")?.setFilterValue(event.target.value)
+            table
+              .getColumn("nama_rancangan")
+              ?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
+        <Input
+          placeholder="Filter Pemrakarsa..."
+          value={
+            (table.getColumn("nama_pemrakarsa")?.getFilterValue() as string) ??
+            ""
+          }
+          onChange={(event) =>
+            table
+              .getColumn("nama_pemrakarsa")
+              ?.setFilterValue(event.target.value)
+          }
+          className="h-8 w-[150px] lg:w-[250px]"
+        />
+        <DataTableFacetedFilter
+          column={table.getColumn("status")}
+          title="Status"
+          options={status_options}
+        />
         {/* {table.getColumn("JUDUL_KATEGORI") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("JUDUL_KATEGORI")}
-            title="Kategori"
-            options={kategori_options}
-          />
-        )}
-        {table.getColumn("IS_WAJIB_OPEN") && (
+        )} */}
+        {/* {table.getColumn("IS_WAJIB_OPEN") && (
           <DataTableFacetedFilter
             column={table.getColumn("IS_WAJIB_OPEN")}
             title="Wajib Dibuka"

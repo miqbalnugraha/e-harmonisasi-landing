@@ -78,10 +78,10 @@ export const PartisipasiSection = () => {
             setIsLoading(false);
           } else {
             setMessage(data.message || "Failed to fetch data");
-            setIsLoading(false);
+            // setIsLoading(false);
           }
         } catch (error: any) {
-          setIsLoading(false);
+          // setIsLoading(false);
           console.error("Error:", error);
           const msg = error?.response.data.message;
           setMessage(msg);

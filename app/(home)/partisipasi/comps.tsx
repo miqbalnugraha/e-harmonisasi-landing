@@ -63,14 +63,6 @@ export const PartisipasiSection = () => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       const fetchData = async () => {
-        console.log(
-          "NEXT_PUBLIC_URL_EHARMON:",
-          process.env.NEXT_PUBLIC_URL_EHARMON
-        );
-        console.log(
-          "NEXT_PRIVATE_TOKEN_EHARMON:",
-          process.env.NEXT_PRIVATE_TOKEN_EHARMON
-        );
         try {
           setIsLoading(true);
           const response = await fetch("/api/partisipasi/count-by-jenis-uu", {

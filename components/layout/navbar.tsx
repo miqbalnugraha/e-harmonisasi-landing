@@ -124,7 +124,7 @@ export const Navbar = () => {
               >
                 <Link
                   aria-label="Login e-Harmonisasi"
-                  href="https://e-harmonisasi.peraturan.go.id"
+                  href={process.env.NEXT_PUBLIC_URL_EHARMON || "#"}
                   target="_blank"
                   className="group flex items-center"
                 >
@@ -193,7 +193,7 @@ export const Navbar = () => {
         >
           <Link
             aria-label="Login e-Harmonisasi"
-            href="https://e-harmonisasi.peraturan.go.id"
+            href={process.env.NEXT_PUBLIC_URL_EHARMON || "#"}
             target="_blank"
             className="group flex items-center"
           >

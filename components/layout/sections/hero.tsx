@@ -34,7 +34,10 @@ export const HeroSection = () => {
           </p>
 
           <div className="space-y-4 md:space-y-0 md:space-x-4">
-            <Link href="https://e-harmonisasi.peraturan.go.id" target="_blank">
+            <Link
+              href={process.env.NEXT_PUBLIC_URL_EHARMON || "#"}
+              target="_blank"
+            >
               <Button className="w-5/6 md:w-1/4 font-bold group/arrow">
                 Login Sekarang
                 <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />

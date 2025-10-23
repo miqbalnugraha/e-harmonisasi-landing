@@ -43,13 +43,16 @@ export const metadata = {
   ],
   openGraph: {
     type: "website",
-    url: "https://e-harmonisasi.peraturan.go.id/",
+    url: process.env.NEXT_PUBLIC_URL_EHARMON || "#",
     title: "e-Harmonisasi",
     description:
       "e-Harmonisasi adalah aplikasi digital resmi Direktorat Jenderal Peraturan Perundang-undangan yang memudahkan proses harmonisasi, partisipasi publik, dan transparansi peraturan.",
     images: [
       {
-        url: "https://e-harmonisasi.peraturan.go.id/images/logo/e-harmonisasi.png",
+        url: process.env.NEXT_PUBLIC_URL_EHARMON
+          ? process.env.NEXT_PUBLIC_URL_EHARMON +
+            "/images/logo/e-harmonisasi.png"
+          : "#",
         width: 1200,
         height: 630,
         alt: "e-Harmonisasi",
@@ -58,12 +61,14 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "https://e-harmonisasi.peraturan.go.id/",
+    site: process.env.NEXT_PUBLIC_URL_EHARMON || "#",
     title: "e-Harmonisasi",
     description:
       "e-Harmonisasi adalah aplikasi digital resmi Direktorat Jenderal Peraturan Perundang-undangan yang memudahkan proses harmonisasi, partisipasi publik, dan transparansi peraturan.",
     images: [
-      "https://e-harmonisasi.peraturan.go.id/images/logo/e-harmonisasi.png",
+      process.env.NEXT_PUBLIC_URL_EHARMON
+        ? process.env.NEXT_PUBLIC_URL_EHARMON + "/images/logo/e-harmonisasi.png"
+        : "#",
     ],
   },
   robots: {

@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_URL_EHARMON: ${NEXT_PUBLIC_URL_EHARMON}
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      NEXT_PRIVATE_TOKEN_EHARMON: ${NEXT_PRIVATE_TOKEN_EHARMON}
+      NEXT_PUBLIC_URL_EHARMON: ${NEXT_PUBLIC_URL_EHARMON}
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env

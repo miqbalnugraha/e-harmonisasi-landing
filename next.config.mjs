@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_URL_EHARMON: process.env.NEXT_PUBLIC_URL_EHARMON,
+  },
   images: {
     remotePatterns: [
       {

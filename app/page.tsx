@@ -1,6 +1,8 @@
 // import { KonsultasiSection } from "@/components/layout/sections/konsultasi";
-import { PartisipasiSection } from "./(home)/partisipasi/comps";
-import { DaftarMasukan } from "./(home)/last-partisipasi/comps";
+import { PartisipasiSection } from "./partisipasi/partisipasi/comps";
+import { DaftarMasukan } from "./partisipasi/last-partisipasi/comps";
+import { RuuSection } from "./(home)/permohonan/comps";
+import { RuuDetailSection } from "./(home)/permohonan-detail/comps";
 import { CommunitySection } from "@/components/layout/sections/community";
 import { ContactSection } from "@/components/layout/sections/contact";
 import { FAQSection } from "@/components/layout/sections/faq";
@@ -82,9 +84,11 @@ export default function Home() {
       <HeroSection />
       {/* <SponsorsSection /> */}
       {/* <FeaturesSection /> */}
-      <PartisipasiSection />
+      <RuuSection />
+      {/* <PartisipasiSection /> */}
       {/* <ServicesSection /> */}
-      <DaftarMasukan />
+      {/* <DaftarMasukan /> */}
+      <RuuDetailSection />
       {/* <TeamSection />
       <CommunitySection /> */}
       {/* <PricingSection />

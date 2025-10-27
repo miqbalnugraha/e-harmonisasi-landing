@@ -37,8 +37,8 @@ export function DataTableToolbar({
     !!valueNamaRancangan || !!valueNamaPemrakarsa || valueStatus.length > 0;
 
   return (
-    <div className="mb-4 flex items-center justify-between">
-      <div className="flex flex-1 items-center space-x-2">
+    <div className="mb-4">
+      <div className="flex flex-wrap items-center gap-2">
         {/* Search by Rancangan */}
         <Input
           placeholder={placeholderNamaRancangan}
@@ -56,12 +56,6 @@ export function DataTableToolbar({
         />
 
         {/* Status filter */}
-        {/* <StatusFilter
-          title="Status"
-          options={status_options}
-          value={status}
-          onChange={setStatus}
-        /> */}
         <StatusFilter
           title="Status"
           options={status_options}

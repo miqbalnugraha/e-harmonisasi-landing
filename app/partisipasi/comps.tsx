@@ -1,6 +1,10 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
+import { PartisipasiSection } from "./partisipasi/comps";
+import { DaftarMasukan } from "./last-partisipasi/comps";
+import { FAQSection } from "./faq";
+
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { HeartHandshake } from "lucide-react";
 import { Regulation, regulations } from "@/types/regulation";
@@ -213,8 +217,8 @@ export default function Partisipasi() {
 
   return (
     <>
-      <section>
-        <div className="text-center flex flex-col items-center justify-center">
+      <section className="container w-full">
+        <div className="text-center flex flex-col items-center justify-center lg:max-w-screen-xl">
           <div className="mb-4">
             <HeartHandshake size={50} className="text-red-500" />
           </div>
@@ -231,15 +235,38 @@ export default function Partisipasi() {
           </p>
         </div>
 
-        <div className="mt-20 justify-between w-full">
-          <div className="flex space-x-2">
+        <PartisipasiSection />
+        <DaftarMasukan />
+
+        <div className="flex flex-col pt-12">
+          {/* <div className="flex flex-row items-end justify-between gap-4 mb-4"> */}
+          <h2 className="text-3xl md:text-4xl font-bold text-start">
+            <span className="text-transparent  bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text">
+              Ayo Berikan Masukan Anda
+            </span>
+            💡
+          </h2>
+          <p className="text-md text-muted-foreground py-4 max-w-2xl">
+            Pilih rancangan peraturan yang sedang dikonsultasikan dan sampaikan
+            pandangan Anda untuk mendukung pembentukan peraturan yang lebih baik
+          </p>
+          {/* </div> */}
+          <Separator className="w-full" />
+        </div>
+
+        <p className="py-4 text-xs text-slate-400">
+          *) pilih jenis PUU dan tahun untuk melihat daftar rancangan peraturan
+          perundang-undangan{" "}
+        </p>
+        <div className="w-full">
+          <div className="flex flex-wrap items-center gap-2">
             <Popover open={openJenisUU} onOpenChange={setOpenJenisUU}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   role="combobox"
                   aria-expanded={openJenisUU}
-                  className="lg:w-1/4 justify-between"
+                  className="w-[200px] lg:w-[300px] justify-between"
                 >
                   <SelectJenisUU
                     value={valueJenisUU}
@@ -248,7 +275,10 @@ export default function Partisipasi() {
                   <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align="start" className="w-full p-0">
+              <PopoverContent
+                align="start"
+                className="w-[200px] lg:w-[300px] p-0"
+              >
                 <Command>
                   <CommandInput placeholder="Cari..." className="h-9 w-full" />
                   <CommandList>
@@ -284,11 +314,12 @@ export default function Partisipasi() {
                 </Command>
               </PopoverContent>
             </Popover>
+
             <Select
               value={valueTahun}
               onValueChange={(val) => setValueTahun(val)}
             >
-              <SelectTrigger className="w-1/12">
+              <SelectTrigger className="w-[100px] lg:w-[120px]">
                 <SelectValue placeholder="Tahun" />
               </SelectTrigger>
               <SelectContent>
@@ -299,15 +330,11 @@ export default function Partisipasi() {
                 ))}
               </SelectContent>
             </Select>
-            {/* <label className="mt-1 w-full block text-xs font-semibold text-slate-400">
-              &nbsp; *) Daftar yang ditampilkan merupakan rancangan peraturan
-              yang berstatus permohonan dan/atau dalam proses harmonisasi.
-            </label> */}
           </div>
-          {/* <div className="col-span-6 -mt-64">
+        </div>
+        {/* <div className="col-span-6 -mt-64">
             <DotLottieReact src="/lotties/Thinking.lottie" loop autoplay />
           </div> */}
-        </div>
         <div className="mt-8">
           <DataTableToolbar
             valueNamaRancangan={searchNamaRancangan}
@@ -338,6 +365,7 @@ export default function Partisipasi() {
             setPostsPerPage={setItemsPerpage}
           />
         </div>
+        <FAQSection />
       </section>
     </>
   );

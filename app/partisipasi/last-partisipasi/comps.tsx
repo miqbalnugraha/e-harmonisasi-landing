@@ -42,7 +42,6 @@ export const DaftarMasukan = () => {
             method: "GET",
           });
           const data = await response.json();
-          console.log(data);
 
           if (response.ok) {
             const res_data = data.data;
@@ -71,7 +70,7 @@ export const DaftarMasukan = () => {
   }, []);
 
   return (
-    <section id="testimonials" className="container py-24 sm:py-32">
+    <section id="testimonials" className="container py-24 sm:py-24">
       <div className="text-center mb-8">
         <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
           Konsultasi Publik

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -59,23 +59,22 @@ const TableRancangan = ({ items, loadingList }: any) => {
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [message, setMessage] = useState("");
   const [dataAktifitas, setDataAktifitas] = useState([]);
-  const [defaultValuesForm, setDefaultValuesForm] = useState({});
+  const [defaultValuesForm, setDefaultValuesForm] = useState([]);
 
-  const handleViewForm = async (status: any, defaultValues: any) => {
-    setDefaultValuesForm([]);
-    setIsLoadingButton(true);
+  const selectedRancanganIdRef = useRef<string>("");
+  const [selectedRancanganId, setSelectedRancanganId] = useState<any>("");
+
+  const handleViewForm = (status: any, id_rancangan: any) => {
     const currentStatus = status?.toLowerCase();
-
     if (currentStatus === "selesai" || currentStatus === "dikembalikan") {
       setIsOpenAlertDialog(true);
-      setIsLoadingButton(false);
       return;
     }
 
-    setDefaultValuesForm([defaultValues]);
-    // console.log(defaultValues);
+    selectedRancanganIdRef.current = id_rancangan;
+    console.log(selectedRancanganIdRef.current);
     setIsOpenForm(true);
-    setIsLoadingButton(false);
+    setIsLoadingButton(false); // ensures render order
   };
 
   const handleViewAktifitas = async (rancangan_id: any) => {
@@ -255,7 +254,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger
-                  onClick={() => handleViewForm(status, defaultValues)}
+                  onClick={() => handleViewForm(status, rancangan.id)}
                 >
                   <Button
                     variant="outline"
@@ -353,7 +352,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
       <RancanganForm
         isOpen={isOpenForm}
         setIsOpen={setIsOpenForm}
-        defaultValues={defaultValuesForm}
+        selectedRancanganId={selectedRancanganIdRef.current}
         onSubmit={(data) => {
           console.log("kirim data:", data);
         }}

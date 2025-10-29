@@ -40,18 +40,18 @@ import Spinner from "@/components/my/spinner";
 
 type DefaultValues = {
   rancangan_id?: string;
-  nama?: string;
-  instansi?: string;
-  email?: string;
-  no_telp?: string;
-  catatan?: string;
-  mewakili?: string;
+  // nama?: string;
+  // instansi?: string;
+  // email?: string;
+  // no_telp?: string;
+  // catatan?: string;
+  // mewakili?: string;
 };
 
 interface RancanganFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  defaultValues?: DefaultValues;
+  selectedRancanganId?: string;
   onSubmit?: (data: Record<string, any>) => void;
   onCancel?: () => void;
 }
@@ -112,25 +112,29 @@ type FormSchema = z.infer<typeof baseSchema>;
 const RancanganForm: React.FC<RancanganFormProps> = ({
   isOpen,
   setIsOpen,
-  defaultValues,
+  selectedRancanganId,
   onSubmit,
   onCancel,
 }) => {
+  // console.log("form: " + selectedRancanganId);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(baseSchema),
     defaultValues: {
-      rancangan_id: defaultValues?.rancangan_id ?? "",
-      nama: defaultValues?.nama ?? "",
-      instansi: defaultValues?.instansi ?? "",
-      email: defaultValues?.email ?? "",
-      no_telp: defaultValues?.no_telp ?? "",
-      catatan: defaultValues?.catatan ?? "",
-      mewakili: (defaultValues?.mewakili as "Pribadi" | "Instansi") ?? "",
+      rancangan_id: selectedRancanganId,
     },
   });
+
+  const { reset } = form;
+
+  // When the dialog opens or selectedRancanganId changes, update the form
+  useEffect(() => {
+    if (selectedRancanganId) {
+      reset({ rancangan_id: selectedRancanganId });
+    }
+  }, [selectedRancanganId, reset]);
 
   const onFormSubmit = async (data: FormSchema) => {
     try {
@@ -188,19 +192,20 @@ const RancanganForm: React.FC<RancanganFormProps> = ({
                 className="space-y-4 p-2"
                 noValidate
               >
+                <FormField
+                  control={form.control}
+                  name="rancangan_id"
+                  render={({ field }) => (
+                    <FormItem className="hidden">
+                      <FormLabel>ID</FormLabel>
+                      <FormControl>
+                        <Input type="hidden" readOnly {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <FormField
-                      control={form.control}
-                      name="rancangan_id"
-                      render={({ field }) => (
-                        <FormItem className="hidden">
-                          <FormControl>
-                            <Input type="hidden" readOnly {...field} />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
                     <FormField
                       control={form.control}
                       name="nama"
@@ -341,8 +346,8 @@ const RancanganForm: React.FC<RancanganFormProps> = ({
                 <div className="flex items-center justify-center gap-2">
                   <Button
                     variant={"default"}
-                    type="submit"
-                    className="flex items-center gap-2"
+                    // type="submit"
+                    className="flex items-center gap-2 "
                     disabled={form.formState.isSubmitting}
                   >
                     {isLoading ? <Spinner /> : "Kirim"}

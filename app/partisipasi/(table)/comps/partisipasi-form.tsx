@@ -26,22 +26,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   Form,
   FormField,
   FormItem,
@@ -70,7 +54,6 @@ interface RancanganFormProps {
   defaultValues?: DefaultValues;
   onSubmit?: (data: Record<string, any>) => void;
   onCancel?: () => void;
-  status?: string;
 }
 
 const baseSchema = z.object({
@@ -107,7 +90,7 @@ const baseSchema = z.object({
         // Block SQL injection patterns
         if (
           /(union|select|insert|update|delete|drop|create|alter|exec|execute|script|declare)(\s+|\()/gi.test(
-            v
+            v,
           )
         ) {
           return false;
@@ -120,7 +103,7 @@ const baseSchema = z.object({
       },
       {
         message: "Saran mengandung karakter atau pola yang tidak diperbolehkan",
-      }
+      },
     ),
 });
 
@@ -132,18 +115,9 @@ const RancanganForm: React.FC<RancanganFormProps> = ({
   defaultValues,
   onSubmit,
   onCancel,
-  status,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  let disabled_button: boolean = false;
-  if (
-    status?.toLocaleLowerCase() == "selesai" ||
-    status?.toLocaleLowerCase() == "dikembalikan"
-  ) {
-    disabled_button = true;
-  }
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(baseSchema),
@@ -159,16 +133,6 @@ const RancanganForm: React.FC<RancanganFormProps> = ({
   });
 
   const onFormSubmit = async (data: FormSchema) => {
-    // const payload: Record<string, any> = {
-    //   rancangan_id: data.rancangan_id,
-    //   nama: data.nama,
-    //   instansi: data.instansi,
-    //   email: data.email,
-    //   no_telp: data.no_telp,
-    //   mewakili: data.mewakili,
-    //   catatan: data.catatan,
-    // };
-    // onSubmit?.(payload);
     try {
       setIsLoading(true);
       let f = new FormData();
@@ -207,215 +171,195 @@ const RancanganForm: React.FC<RancanganFormProps> = ({
   };
 
   return (
-    <div>
-      {disabled_button ? (
-        <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Perhatian!</AlertDialogTitle>
-              <AlertDialogDescription>
-                Masukan terhadap rancangan hanya dapat diajukan ketika status
-                harmonisasi berada pada tahap <b>Permohonan</b> atau{" "}
-                <b>Proses</b>.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      ) : (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent className="sm:max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Beri Masukan untuk Rancangan</DialogTitle>
-              <DialogDescription>
-                Silakan isi form di bawah untuk memberikan masukan.
-              </DialogDescription>
-            </DialogHeader>
+    <>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Beri Masukan untuk Rancangan</DialogTitle>
+            <DialogDescription>
+              Silakan isi form di bawah untuk memberikan masukan.
+            </DialogDescription>
+          </DialogHeader>
 
-            <ScrollArea type="always" className="h-[500px] pr-4">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onFormSubmit)}
-                  className="space-y-4 p-2"
-                  noValidate
-                >
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="rancangan_id"
-                        render={({ field }) => (
-                          <FormItem className="hidden">
-                            <FormControl>
-                              <Input type="hidden" readOnly {...field} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="nama"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Nama</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Tulis nama anda" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="instansi"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Instansi</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Tulis nama instansi anda"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Tulis email anda"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="no_telp"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>No Telpon</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Tulis no telpon anda"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="catatan"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Saran / Masukan</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            rows={6}
-                            placeholder="Tulis saran anda"
-                            {...field}
-                          />
-                        </FormControl>
-                        <div className="flex justify-between items-center mt-1">
-                          <FormMessage />
-                          <span className="text-xs text-muted-foreground">
-                            {field.value?.length || 0} / 4000
-                          </span>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-
+          <ScrollArea type="always" className="h-[500px] pr-4">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onFormSubmit)}
+                className="space-y-4 p-2"
+                noValidate
+              >
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <FormField
                       control={form.control}
-                      name="mewakili"
+                      name="rancangan_id"
+                      render={({ field }) => (
+                        <FormItem className="hidden">
+                          <FormControl>
+                            <Input type="hidden" readOnly {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="nama"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Mewakili</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="-Mewakili-" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Pribadi">Pribadi</SelectItem>
-                              <SelectItem value="Instansi">Instansi</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <FormLabel>Nama</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Tulis nama anda" {...field} />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
 
-                  <div className="rounded border bg-muted p-3 text-xs">
-                    <p className="text-xs text-muted-foreground mb-2">
-                      * Pasal 7 ayat (1) dan ayat (2) Permenkumham Nomor 11
-                      Tahun 2021
-                    </p>
-                    <p className="mb-2">
-                      (1) Tanggapan dan/atau masukan dari Masyarakat dapat
-                      berupa catatan, penambahan usul, dan/atau pengurangan usul
-                      terhadap konsep sebagaimana dimaksud dalam Pasal 4.
-                    </p>
-                    <p>
-                      (2) Tanggapan dan/atau masukan sebagaimana dimaksud pada
-                      ayat (1) dapat disampaikan secara lisan dan/atau tertulis
-                      serta dilengkapi dengan identitas pengusul.
-                    </p>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="instansi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Instansi</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Tulis nama instansi anda"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
 
-                  <div className="flex items-center justify-center gap-2">
-                    <Button
-                      type="submit"
-                      className="flex items-center gap-2"
-                      disabled={form.formState.isSubmitting}
-                    >
-                      {isLoading ? <Spinner /> : "Kirim"}
-                    </Button>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Tulis email anda" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
-                </form>
-              </Form>
-            </ScrollArea>
 
-            <DialogFooter>
-              <DialogClose asChild>
-                <button className="mt-2 text-sm">Close</button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="no_telp"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>No Telpon</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Tulis no telpon anda"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="catatan"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Saran / Masukan</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={6}
+                          placeholder="Tulis saran anda"
+                          {...field}
+                        />
+                      </FormControl>
+                      <div className="flex justify-between items-center mt-1">
+                        <FormMessage />
+                        <span className="text-xs text-muted-foreground">
+                          {field.value?.length || 0} / 4000
+                        </span>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="mewakili"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mewakili</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="-Mewakili-" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Pribadi">Pribadi</SelectItem>
+                            <SelectItem value="Instansi">Instansi</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="rounded border bg-muted p-3 text-xs">
+                  <p className="text-xs text-muted-foreground mb-2">
+                    * Pasal 7 ayat (1) dan ayat (2) Permenkumham Nomor 11 Tahun
+                    2021
+                  </p>
+                  <p className="mb-2">
+                    (1) Tanggapan dan/atau masukan dari Masyarakat dapat berupa
+                    catatan, penambahan usul, dan/atau pengurangan usul terhadap
+                    konsep sebagaimana dimaksud dalam Pasal 4.
+                  </p>
+                  <p>
+                    (2) Tanggapan dan/atau masukan sebagaimana dimaksud pada
+                    ayat (1) dapat disampaikan secara lisan dan/atau tertulis
+                    serta dilengkapi dengan identitas pengusul.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center gap-2">
+                  <Button
+                    variant={"default"}
+                    type="submit"
+                    className="flex items-center gap-2"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {isLoading ? <Spinner /> : "Kirim"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </ScrollArea>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <button className="mt-2 text-sm">Close</button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

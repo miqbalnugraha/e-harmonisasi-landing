@@ -51,7 +51,7 @@ function DataTablePagination({
         {/* Rows per page selector (optional) */}
         {setPostsPerPage && (
           <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
+            <p className="text-sm font-medium">Per page</p>
             <Select
               value={`${postsPerPage}`}
               onValueChange={(value) => setPostsPerPage(Number(value))}

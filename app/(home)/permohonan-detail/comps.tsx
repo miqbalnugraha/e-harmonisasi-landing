@@ -162,7 +162,7 @@ export const RuuDetailSection = () => {
           <Marquee
             className="gap-[2rem]"
             fade
-            innerClassName="flex gap-[2rem]"
+            innerClassName="flex gap-[2rem] pb-4"
             pauseOnHover
           >
             {isLoading ? (
@@ -179,7 +179,7 @@ export const RuuDetailSection = () => {
                         {/* Icon with animated background */}
                         <div
                           className={`relative p-3 rounded-2xl bg-gradient-to-br ${getGradient(
-                            index
+                            index,
                           )} bg-opacity-10 transition-transform duration-500`}
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
@@ -203,7 +203,7 @@ export const RuuDetailSection = () => {
                         <div className="text-right">
                           <div
                             className={`text-6xl font-black bg-gradient-to-br ${getGradient(
-                              index
+                              index,
                             )} bg-clip-text text-transparent transition-transform duration-500 origin-right`}
                           >
                             {item.total}
@@ -271,7 +271,7 @@ export const RuuDetailSection = () => {
                         <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div
                             className={`h-full bg-gradient-to-r ${getGradient(
-                              index
+                              index,
                             )} rounded-full transition-all duration-1000 ease-out group-hover:animate-pulse`}
                             style={{
                               width: `${(item.selesai / item.total) * 100}%`,

@@ -74,7 +74,7 @@ export default function DataTableSkeleton() {
 
         {/* Pagination controls */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Rows per page</span>
+          <span className="text-sm text-muted-foreground">per page</span>
           <Skeleton className="h-10 w-16" />
           <span className="text-sm text-muted-foreground mx-4">
             Page 1 of 0

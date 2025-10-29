@@ -41,17 +41,41 @@ import Loading from "./loading";
 import Spinner from "@/components/my/spinner";
 import { toast } from "sonner";
 import { useFileDownload } from "@/lib/useFileDownload";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const TableRancangan = ({ items, loadingList }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenForm, setIsOpenForm] = useState(false);
+  const [isOpenAlertDialog, setIsOpenAlertDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [message, setMessage] = useState("");
   const [dataAktifitas, setDataAktifitas] = useState([]);
+  const [defaultValuesForm, setDefaultValuesForm] = useState({});
 
-  const handleViewForm = async () => {
+  const handleViewForm = async (status: any, defaultValues: any) => {
+    setDefaultValuesForm([]);
+    setIsLoadingButton(true);
+    const currentStatus = status?.toLowerCase();
+
+    if (currentStatus === "selesai" || currentStatus === "dikembalikan") {
+      setIsOpenAlertDialog(true);
+      setIsLoadingButton(false);
+      return;
+    }
+
+    setDefaultValuesForm([defaultValues]);
+    // console.log(defaultValues);
     setIsOpenForm(true);
+    setIsLoadingButton(false);
   };
 
   const handleViewAktifitas = async (rancangan_id: any) => {
@@ -89,7 +113,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
   const handleDownloadFile = async (
     id: any,
     slug: string,
-    filename: string
+    filename: string,
   ) => {
     setIsLoadingButton(true);
     await downloadFile({
@@ -166,10 +190,10 @@ const TableRancangan = ({ items, loadingList }: any) => {
               val.status === "Permohonan"
                 ? "bg-lime-600 dark:bg-lime-700"
                 : val.status === "Selesai"
-                ? "bg-blue-600 dark:bg-blue-700"
-                : val.status === "Dikembalikan"
-                ? "bg-red-500 dark:bg-red-400"
-                : "bg-gray-400 dark:bg-gray-600"
+                  ? "bg-blue-600 dark:bg-blue-700"
+                  : val.status === "Dikembalikan"
+                    ? "bg-red-500 dark:bg-red-400"
+                    : "bg-gray-400 dark:bg-gray-600"
             }`}
           >
             {val.status}
@@ -197,7 +221,6 @@ const TableRancangan = ({ items, loadingList }: any) => {
           rancangan_id: `${rancangan.id}`,
           nama: "",
           instansi: "",
-          // saran: `Menanggapi rancangan: ${rancangan.nama_rancangan}`,
           saran: "",
           mewakili: "",
         };
@@ -211,7 +234,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
                     handleDownloadFile(
                       rancangan.id,
                       "draft_rancangan",
-                      rancangan.file_rancangan
+                      rancangan.file_rancangan,
                     )
                   }
                 >
@@ -231,7 +254,9 @@ const TableRancangan = ({ items, loadingList }: any) => {
             </TooltipProvider>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger onClick={() => handleViewForm()}>
+                <TooltipTrigger
+                  onClick={() => handleViewForm(status, defaultValues)}
+                >
                   <Button
                     variant="outline"
                     size="icon"
@@ -246,16 +271,6 @@ const TableRancangan = ({ items, loadingList }: any) => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <RancanganForm
-              isOpen={isOpenForm}
-              setIsOpen={setIsOpenForm}
-              defaultValues={defaultValues}
-              onSubmit={(data) => {
-                console.log("kirim data:", data);
-              }}
-              status={typeof status === "string" ? status : undefined}
-            />
-
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger
@@ -279,12 +294,6 @@ const TableRancangan = ({ items, loadingList }: any) => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <AktivitasMasyarakatDialog
-              data={dataAktifitas}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              isLoading={isLoading}
-            />
           </div>
         );
       },
@@ -294,7 +303,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
   // --- state & table ---
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -325,6 +334,38 @@ const TableRancangan = ({ items, loadingList }: any) => {
 
   return (
     <>
+      <AlertDialog open={isOpenAlertDialog} onOpenChange={setIsOpenAlertDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Perhatian!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Masukan terhadap rancangan hanya dapat diajukan ketika status
+              harmonisasi berada pada tahap <b>Permohonan</b> atau <b>Proses</b>
+              .
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <RancanganForm
+        isOpen={isOpenForm}
+        setIsOpen={setIsOpenForm}
+        defaultValues={defaultValuesForm}
+        onSubmit={(data) => {
+          console.log("kirim data:", data);
+        }}
+      />
+
+      <AktivitasMasyarakatDialog
+        data={dataAktifitas}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        isLoading={isLoading}
+      />
+
       <div className="mb-6 overflow-hidden rounded-md border p-0">
         {loadingList ? (
           <Loading />
@@ -352,7 +393,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     ))}
@@ -377,7 +418,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       ))}

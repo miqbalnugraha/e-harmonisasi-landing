@@ -282,7 +282,9 @@ export default function Partisipasi() {
                 <Command>
                   <CommandInput placeholder="Cari..." className="h-9 w-full" />
                   <CommandList>
-                    <CommandEmpty>Jenis UU Tidak Ditemukan.</CommandEmpty>
+                    <CommandEmpty>
+                      {isLoading ? "Loading..." : "Jenis UU Tidak Ditemukan."}
+                    </CommandEmpty>
                     <CommandGroup>
                       {jenisUUList.length > 0 &&
                         jenisUUList.map((item: any, index: any) => (

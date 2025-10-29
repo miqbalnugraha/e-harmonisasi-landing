@@ -115,7 +115,7 @@ export const Navbar = () => {
             <SheetFooter className="flex-col sm:flex-col justify-start items-start">
               <Separator className="mb-2" />
 
-              {/* <ToggleTheme /> */}
+              <ToggleTheme />
               <Button
                 asChild
                 size="sm"

@@ -98,10 +98,20 @@ const benefitList: BenefitsProps[] = [
 
 export const PartisipasiSection = () => {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 2000, stopOnInteraction: true }),
   );
 
   const getRandomIcon = (index: number) => iconPool[index % iconPool.length];
+  const getGradient = (index: any) => {
+    const gradients = [
+      "from-blue-500 to-cyan-500",
+      "from-purple-500 to-pink-500",
+      "from-orange-500 to-red-500",
+      "from-green-500 to-emerald-500",
+      "from-indigo-500 to-purple-500",
+    ];
+    return gradients[index % gradients.length];
+  };
 
   const getRandomColor = (index: number) =>
     colorPalette[index % colorPalette.length];
@@ -120,7 +130,7 @@ export const PartisipasiSection = () => {
             "/api/rancangan/count-rancangan-partisipasi",
             {
               method: "GET",
-            }
+            },
           );
           const data = await response.json();
           if (response.ok) {
@@ -186,7 +196,7 @@ export const PartisipasiSection = () => {
       </div>
       <div className="mx-auto">
         <Marquee
-          className="gap-[2rem]"
+          className="gap-[2rem] pb-4"
           fade
           innerClassName="gap-[2rem]"
           pauseOnHover
@@ -197,31 +207,48 @@ export const PartisipasiSection = () => {
             countPartisipasi.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center w-[300px] h-[200px]"
+                className="p-2 flex-shrink-0 w-[320px] h-[250px]"
               >
-                <Card className="bg-muted/50 dark:bg-card hover:bg-background transition-all delay-75 group/number w-full h-full">
-                  <CardHeader>
-                    <div className="flex justify-between">
-                      {(() => {
-                        const RandomIcon = getRandomIcon(index);
-                        return (
-                          <RandomIcon
-                            size={32}
-                            className={`mb-6 transition-transform duration-500 group-hover:scale-110 ${getRandomColor(
-                              index
-                            )}`}
-                          />
-                        );
-                      })()}
-                      <span className="text-5xl text-muted-foreground/50 font-medium transition-all delay-75 group-hover/number:text-muted-foreground/30">
-                        {item.total}
-                      </span>
+                <Card className="group relative flex flex-col justify-between overflow-hidden border-0 bg-white dark:bg-gray-900 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 h-full">
+                  <CardHeader className="space-y-4 flex-grow-0">
+                    <div className="flex justify-between items-start">
+                      {/* Icon with animated background */}
+                      <div
+                        className={`relative p-3 rounded-2xl bg-gradient-to-br ${getGradient(
+                          index,
+                        )} bg-opacity-10 transition-transform duration-500`}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
+
+                        {(() => {
+                          const RandomIcon = getRandomIcon(index);
+                          return (
+                            <RandomIcon
+                              size={32}
+                              className={`transition-transform duration-500 group-hover:scale-110 text-secondary`}
+                            />
+                          );
+                        })()}
+                      </div>
+
+                      {/* Large number with gradient */}
+                      <div className="text-right">
+                        <div
+                          className={`text-6xl font-black bg-gradient-to-br ${getGradient(
+                            index,
+                          )} bg-clip-text text-transparent transition-transform duration-500 origin-right`}
+                        >
+                          {item.total}
+                        </div>
+                      </div>
                     </div>
 
-                    <CardTitle>{item.singkatan}</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-100 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-600 dark:group-hover:from-white dark:group-hover:to-gray-400 group-hover:bg-clip-text transition-all duration-300">
+                      {item.singkatan}
+                    </CardTitle>
                   </CardHeader>
 
-                  <CardContent className="text-muted-foreground">
+                  <CardContent className="space-y-3 flex-grow">
                     {item.nama_jenis_uu}
                   </CardContent>
                 </Card>

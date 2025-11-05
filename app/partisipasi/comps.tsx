@@ -39,6 +39,7 @@ import { DataTableToolbar } from "@/components/data-table/data-table-toolbar-ser
 import DataTablePagination from "@/components/data-table/data-table-pagination-serverside";
 import { Rancangan } from "@/types/rancangan";
 import { formatDateAndOtherTime } from "@/lib/formatDate";
+import { toast } from "sonner";
 
 export default function Partisipasi() {
   const [isLoading, setIsLoading] = useState(false);
@@ -83,6 +84,7 @@ export default function Partisipasi() {
       const delayDebounceFn = setTimeout(() => {
         const fetchListRancangan = async () => {
           try {
+            setDisplayedItems([]);
             setIsLoading(true);
             let f = new FormData();
             const split_valueJenisUU = valueJenisUU.split("#");
@@ -132,17 +134,18 @@ export default function Partisipasi() {
             } else {
               setMessage(data.message || "Failed to fetch data");
               setIsLoading(false);
+              toast.error(data.error, {
+                description: data.message,
+              });
+              // throw new Error(
+              //   data.message ?? data.error ?? "Something went wrong"
+              // );
             }
           } catch (error: any) {
             setIsLoading(false);
-            console.error("Error:", error);
-            const msg = error?.response.data.message;
-            setMessage(msg);
-            if (!msg) {
-              const res_data = error?.response.data;
-              const responseCode = res_data.split(":");
-              setMessage(responseCode[0]);
-            }
+            toast.error("Error!", {
+              description: error.error,
+            });
           }
         };
         fetchListRancangan();
@@ -197,17 +200,19 @@ export default function Partisipasi() {
           } else {
             setMessage(data.message || "Failed to fetch data");
             setIsLoading(false);
+            toast.error(data.error, {
+              description: data.message,
+            });
+            // throw new Error(
+            //   data.message ?? data.error ?? "Something went wrong"
+            // );
           }
         } catch (error: any) {
           setIsLoading(false);
-          console.error("Error:", error);
-          const msg = error?.response.data.message;
-          setMessage(msg);
-          if (!msg) {
-            const res_data = error?.response.data;
-            const responseCode = res_data.split(":");
-            setMessage(responseCode[0]);
-          }
+          console.log(error);
+          toast.error("Error!", {
+            description: error.error,
+          });
         }
       };
       fetchMasterJenisUU();

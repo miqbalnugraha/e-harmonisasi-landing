@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Loading from "./loading";
 import { Counter } from "@/components/my/counter";
+import { toast } from "sonner";
 
 interface BenefitsProps {
   icon: string;
@@ -71,18 +72,16 @@ export const RuuSection = () => {
             setIsLoading(false);
           } else {
             setMessage(data.message || "Failed to fetch data");
-            // setIsLoading(false);
+            toast.error(data.error, {
+              description: data.message,
+            });
+            // throw new Error(data.message ?? data.error ?? "Something went wrong");
           }
         } catch (error: any) {
           // setIsLoading(false);
-          console.error("Error:", error);
-          const msg = error?.response.data.message;
-          setMessage(msg);
-          if (!msg) {
-            const res_data = error?.response.data;
-            const responseCode = res_data.split(":");
-            setMessage(responseCode[0]);
-          }
+          toast.error("Error!", {
+            description: error.error,
+          });
         }
       };
       fetchData();

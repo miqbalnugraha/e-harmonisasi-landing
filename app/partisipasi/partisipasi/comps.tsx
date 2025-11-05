@@ -31,6 +31,7 @@ import {
 import { Marquee } from "@devnomic/marquee";
 import "@devnomic/marquee/dist/index.css";
 import Loading from "./loading";
+import { toast } from "sonner";
 
 const iconPool = [
   Sparkles,
@@ -98,7 +99,7 @@ const benefitList: BenefitsProps[] = [
 
 export const PartisipasiSection = () => {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true }),
+    Autoplay({ delay: 2000, stopOnInteraction: true })
   );
 
   const getRandomIcon = (index: number) => iconPool[index % iconPool.length];
@@ -130,7 +131,7 @@ export const PartisipasiSection = () => {
             "/api/rancangan/count-rancangan-partisipasi",
             {
               method: "GET",
-            },
+            }
           );
           const data = await response.json();
           if (response.ok) {
@@ -140,18 +141,19 @@ export const PartisipasiSection = () => {
             setIsLoading(false);
           } else {
             setMessage(data.message || "Failed to fetch data");
+            toast.error(data.error, {
+              description: data.message,
+            });
+            // throw new Error(
+            //   data.message ?? data.error ?? "Something went wrong"
+            // );
             // setIsLoading(false);
           }
         } catch (error: any) {
           // setIsLoading(false);
-          console.error("Error:", error);
-          const msg = error?.response.data.message;
-          setMessage(msg);
-          if (!msg) {
-            const res_data = error?.response.data;
-            const responseCode = res_data.split(":");
-            setMessage(responseCode[0]);
-          }
+          toast.error("Error!", {
+            description: error.error,
+          });
         }
       };
       fetchData();
@@ -215,7 +217,7 @@ export const PartisipasiSection = () => {
                       {/* Icon with animated background */}
                       <div
                         className={`relative p-3 rounded-2xl bg-gradient-to-br ${getGradient(
-                          index,
+                          index
                         )} bg-opacity-10 transition-transform duration-500`}
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
@@ -235,7 +237,7 @@ export const PartisipasiSection = () => {
                       <div className="text-right">
                         <div
                           className={`text-6xl font-black bg-gradient-to-br ${getGradient(
-                            index,
+                            index
                           )} bg-clip-text text-transparent transition-transform duration-500 origin-right`}
                         >
                           {item.total}

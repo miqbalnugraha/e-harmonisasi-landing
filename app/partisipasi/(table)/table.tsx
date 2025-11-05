@@ -39,7 +39,6 @@ import { Button } from "@/components/ui/button";
 import { BarChart2, Download, Lightbulb, PenBox } from "lucide-react";
 import Loading from "./loading";
 import Spinner from "@/components/my/spinner";
-import { toast } from "sonner";
 import { useFileDownload } from "@/lib/useFileDownload";
 import {
   AlertDialog,
@@ -50,6 +49,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 const TableRancangan = ({ items, loadingList }: any) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -96,12 +96,17 @@ const TableRancangan = ({ items, loadingList }: any) => {
         setDataAktifitas(res.data);
       } else {
         setMessage(res.message);
+        toast.error(res.error, {
+          description: res.message,
+        });
+        // throw new Error(res.message ?? res.error ?? "Something went wrong");
       }
       setIsLoading(false);
       setIsLoadingButton(false);
     } catch (error: any) {
-      console.log(error);
-      setMessage(error.message);
+      toast.error("Error!", {
+        description: error.error,
+      });
       setIsLoading(false);
       setIsLoadingButton(false);
     }
@@ -112,7 +117,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
   const handleDownloadFile = async (
     id: any,
     slug: string,
-    filename: string,
+    filename: string
   ) => {
     setIsLoadingButton(true);
     await downloadFile({
@@ -189,10 +194,10 @@ const TableRancangan = ({ items, loadingList }: any) => {
               val.status === "Permohonan"
                 ? "bg-lime-600 dark:bg-lime-700"
                 : val.status === "Selesai"
-                  ? "bg-blue-600 dark:bg-blue-700"
-                  : val.status === "Dikembalikan"
-                    ? "bg-red-500 dark:bg-red-400"
-                    : "bg-gray-400 dark:bg-gray-600"
+                ? "bg-blue-600 dark:bg-blue-700"
+                : val.status === "Dikembalikan"
+                ? "bg-red-500 dark:bg-red-400"
+                : "bg-gray-400 dark:bg-gray-600"
             }`}
           >
             {val.status}
@@ -233,7 +238,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
                     handleDownloadFile(
                       rancangan.id,
                       "draft_rancangan",
-                      rancangan.file_rancangan,
+                      rancangan.file_rancangan
                     )
                   }
                 >
@@ -302,7 +307,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
   // --- state & table ---
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -392,7 +397,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             )}
                       </TableHead>
                     ))}
@@ -417,7 +422,7 @@ const TableRancangan = ({ items, loadingList }: any) => {
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext(),
+                            cell.getContext()
                           )}
                         </TableCell>
                       ))}

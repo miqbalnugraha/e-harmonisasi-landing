@@ -38,6 +38,7 @@ import { Marquee } from "@devnomic/marquee";
 import "@devnomic/marquee/dist/index.css";
 import Loading from "./loading";
 import { Icon } from "@/components/ui/icon";
+import { toast } from "sonner";
 
 const iconPool = [
   Sparkles,
@@ -124,18 +125,19 @@ export const RuuDetailSection = () => {
             setIsLoading(false);
           } else {
             setMessage(data.message || "Failed to fetch data");
+            toast.error(data.error, {
+              description: data.message,
+            });
+            // throw new Error(
+            //   data.message ?? data.error ?? "Something went wrong"
+            // );
             // setIsLoading(false);
           }
         } catch (error: any) {
           // setIsLoading(false);
-          console.error("Error:", error);
-          const msg = error?.response.data.message;
-          setMessage(msg);
-          if (!msg) {
-            const res_data = error?.response.data;
-            const responseCode = res_data.split(":");
-            setMessage(responseCode[0]);
-          }
+          toast.error("Error!", {
+            description: error.error,
+          });
         }
       };
       fetchData();
@@ -179,7 +181,7 @@ export const RuuDetailSection = () => {
                         {/* Icon with animated background */}
                         <div
                           className={`relative p-3 rounded-2xl bg-gradient-to-br ${getGradient(
-                            index,
+                            index
                           )} bg-opacity-10 transition-transform duration-500`}
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl" />
@@ -203,7 +205,7 @@ export const RuuDetailSection = () => {
                         <div className="text-right">
                           <div
                             className={`text-6xl font-black bg-gradient-to-br ${getGradient(
-                              index,
+                              index
                             )} bg-clip-text text-transparent transition-transform duration-500 origin-right`}
                           >
                             {item.total}
@@ -271,7 +273,7 @@ export const RuuDetailSection = () => {
                         <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div
                             className={`h-full bg-gradient-to-r ${getGradient(
-                              index,
+                              index
                             )} rounded-full transition-all duration-1000 ease-out group-hover:animate-pulse`}
                             style={{
                               width: `${(item.selesai / item.total) * 100}%`,
